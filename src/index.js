@@ -1,13 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
 
 import "./index.css";
 import App from "./components/App";
-import movies from "./reducers";
+import rootReducer from "./reducers";
 
-const store = createStore(movies);
-console.log("Store", store);
 // console.log("Before State", store.getState());
 
 // store.dispatch({
@@ -16,6 +14,31 @@ console.log("Store", store);
 // });
 
 // console.log("After State", store.getState());
+
+//function logger(obj, next , action)
+// looger(ob)(next)(action)
+
+// const logger = function ({ dispatch, getState }) {
+//   return function (next) {
+//     return function (action) {
+//       //miidleware Code
+//       console.log("ACTION_TYPE = ", action.type);
+//       next(action);
+//     };
+//   };
+// };
+
+const logger =
+  ({ dispatch, getState }) =>
+  (next) =>
+  (action) => {
+    //loogger code
+    console.log("ACTION_TYPE = ", action.type);
+    next(action);
+  };
+
+const store = createStore(rootReducer, applyMiddleware(logger));
+console.log("Store", store);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
